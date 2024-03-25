@@ -1,0 +1,16 @@
+---
+logger:
+  name: configuration_management
+  level: INFO
+  handlers:
+    - type: RotatingFileHandler
+      file_path: data/oee-services/logs/
+      max_bytes: 100000000
+      back_up_count: 5
+
+    - type: SocketHandler
+      host: localhost
+      port: 23582
+
+    - type: StreamHandler
+      name: configuration_management
