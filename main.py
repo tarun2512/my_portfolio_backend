@@ -20,7 +20,7 @@ flask_compress.Compress(app)
 app.register_blueprint(login_blueprint)
 
 try:
-    port = sys.argv[1]
+    port = 8999
 except:
     port = Service.PORT
 app.run(host=Service.HOST, port=port, debug=False, threaded=True, use_reloader=False)
