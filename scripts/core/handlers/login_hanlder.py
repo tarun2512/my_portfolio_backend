@@ -4,6 +4,12 @@ from scripts.schemas.login_schema import LoginModel
 from scripts.utils.mongo_utility import mongo_client
 import socket
 import datetime
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.header import Header
+from email.utils import formataddr
+from smtplib import SMTPException, SMTPAuthenticationError
 
 
 class LoginHandler:
@@ -43,5 +49,44 @@ class LoginHandler:
         self.visitors.save_user(data.get("user_name"), visitor_data)
         return {"status": "success", "message": "Successfully saved data"}
 
-    def view_visitors_list(self):
-        ...
+    def contact_us_mail_sending(name, email, contact_message):
+        try:
+            subject = "Contacted through portfolio application"
+            sender_address = 'chowdhary12345678@gmail.com'  # Replace with your sender email
+            sender_password = 'lgbzmvyxcyxzihxw'  # Replace with your sender password
+            receiver_address = 'tarunmadamanchi@gmail.com'  # Replace with your recipient email
+            recipient_name = 'Tarun Madamanchi'
+
+            message = MIMEMultipart()
+            from_header = subject
+            message['From'] = formataddr((str(Header(from_header, 'utf-8')), sender_address))
+            message['To'] = formataddr((str(Header(recipient_name, 'utf-8')), receiver_address))
+
+            html = f"""\
+            <html>
+              <body>
+                <p>Hi {name},<br>
+                <br>
+                email: {email}<br>
+                message: {contact_message}<br>
+                </p>
+              </body>
+            </html>
+            """
+            body_html = MIMEText(html, 'html')
+            message.attach(body_html)
+
+            with smtplib.SMTP('smtp.gmail.com', 587) as session:
+                session.starttls()
+                session.login(sender_address, sender_password)
+                text = message.as_string()
+                session.sendmail(sender_address, receiver_address, text)
+
+            return {"status": "success"}
+        except SMTPAuthenticationError:
+            return {"status": "SMTP authentication failed"}
+        except SMTPException as e:
+            return {"status": str(e)}
+        except Exception as e:
+            return {"status": str(e)}
+

@@ -33,3 +33,13 @@ def save_visitor_data():
         return DefaultResponse(message=response.get("message"), data=False).dict()
 
 
+@login_blueprint.route(APIEndpoints.contact_me, methods=['POST'])
+def contact_me():
+    # Get the JSON data from the request
+    data = request.json
+    login_handler = LoginHandler()
+    response = login_handler.contact_us_mail_sending(data.get("email"), data.get("message"))
+    if response.get('status') == 'success':
+        return DefaultResponse(status="success", message=response.get("message"), data=True).dict()
+    else:
+        return DefaultResponse(message=response.get("message"), data=False).dict()

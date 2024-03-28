@@ -30,7 +30,4 @@ class Visitors(MongoCollectionBaseClass):
 
     def save_user(self, visitor_name, data):
         query = {"visitor_name": visitor_name}
-        if user := self.update_one(query=query, data=data, upsert=True):
-            return dict(user)
-        else:
-            return user
+        self.update_one(query=query, data=data, upsert=True)

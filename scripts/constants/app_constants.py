@@ -2,6 +2,7 @@
 class APIEndpoints:
     login = "/login"
     visitor_login = "/visitor-login"
+    contact_me = "/contact-me"
 
 
 class Collections:
