@@ -1,7 +1,11 @@
+from scripts.db.mongo.collections.my_resume import MyResume
 from scripts.db.mongo.collections.user import User
 from scripts.db.mongo.collections.visitors import Visitors, VisitorsSchema
 from scripts.schemas.login_schema import LoginModel
 from scripts.utils.mongo_utility import mongo_client
+import os
+import time
+import base64
 import socket
 import datetime
 import smtplib
@@ -16,6 +20,7 @@ class LoginHandler:
     def __init__(self):
         self.user = User(mongo_client=mongo_client)
         self.visitors = Visitors(mongo_client=mongo_client)
+        self.my_resume = MyResume(mongo_client=mongo_client)
 
     def validate_login(self, data):
         final_json = {"status": "failed", "message": "User/Password invalid"}
@@ -49,7 +54,7 @@ class LoginHandler:
         self.visitors.save_user(data.get("user_name"), visitor_data)
         return {"status": "success", "message": "Successfully saved data"}
 
-    def contact_us_mail_sending(name, email, contact_message):
+    def contact_us_mail_sending(self, email, contact_message):
         try:
             subject = "Contacted through portfolio application"
             sender_address = 'chowdhary12345678@gmail.com'  # Replace with your sender email
@@ -65,7 +70,7 @@ class LoginHandler:
             html = f"""\
             <html>
               <body>
-                <p>Hi {name},<br>
+                <p>Hi {recipient_name},<br>
                 <br>
                 email: {email}<br>
                 message: {contact_message}<br>
@@ -90,3 +95,16 @@ class LoginHandler:
         except Exception as e:
             return {"status": str(e)}
 
+    def fetch_resume(self, request_data):
+        record = self.my_resume.get_resume()
+        path = os.path.join(os.getcwd(), "code", "data")
+        if not os.path.exists(path):
+            os.makedirs(os.path.join(path))
+        pdf_data = base64.b64decode(record.get("pdf_data"))
+        file_path = os.path.join(path, "my_resume.pdf")
+        # Write binary data to a PDF file
+        with open(file_path, 'wb') as pdf_file:
+            pdf_file.write(pdf_data)
+        record["last_fetched_date"] = int(time.time())
+        record["last_fetched_by"] = request_data.get("user_name")
+        return file_path

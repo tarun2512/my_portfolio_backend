@@ -1,5 +1,7 @@
-from flask import Blueprint, request
-
+from flask import Blueprint, request, send_file
+import os
+from pathlib import Path
+from scripts.constants.app_configurations import PathToStorage
 from scripts.core.handlers.login_hanlder import LoginHandler
 from scripts.constants.app_constants import Database, APIEndpoints
 from scripts.schemas.response_model import DefaultResponse
@@ -43,3 +45,11 @@ def contact_me():
         return DefaultResponse(status="success", message=response.get("message"), data=True).dict()
     else:
         return DefaultResponse(message=response.get("message"), data=False).dict()
+
+
+@login_blueprint.route(APIEndpoints.download_resume, methods=['POST'])
+def get_pdf():
+    data = request.json
+    login_handler = LoginHandler()
+    path = login_handler.fetch_resume(data)
+    return send_file(path, as_attachment=True)
