@@ -3,6 +3,7 @@ from scripts.db.mongo.collections.user import User
 from scripts.db.mongo.collections.visitors import Visitors, VisitorsSchema
 from scripts.schemas.login_schema import LoginModel
 from scripts.utils.mongo_utility import mongo_client
+from bson.binary import Binary
 import os
 import time
 import base64
@@ -107,4 +108,21 @@ class LoginHandler:
             pdf_file.write(pdf_data)
         record["last_fetched_date"] = int(time.time())
         record["last_fetched_by"] = request_data.get("user_name")
+        self.my_resume.update_resume(record)
         return file_path
+
+    def upload_resume(self, pdf_content, pdf_name):
+        # Convert PDF content to Base64
+        pdf_base64 = base64.b64encode(pdf_content).decode("utf-8")
+
+        # Save PDF into MongoDB along with its name
+        pdf_data = {
+            'resume_name': pdf_name,
+            'pdf_data': pdf_base64,
+            'last_fetched_by': 'Admin',
+            "last_updated_at": int(time.time()),
+            "last_fetched_date": int(time.time()),
+        }
+        self.my_resume.insert_one(pdf_data)
+
+        return {'message': 'PDF uploaded successfully'}
