@@ -17,10 +17,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1  # Replace with your region
 
+      - name: Convert .ppk to .pem
+        run: puttygen test_instance.ppk -O private-openssh -o deploy-key/id_rsa
+
       - name: Upload SSH key
         uses: actions/upload-artifact@v3
         with:
           name: ssh-key
+          path: deploy-key/id_rsa
+          if-no-files-found: warn
 
       - name: Download SSH key
         run: |
