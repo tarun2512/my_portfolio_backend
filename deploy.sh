@@ -1,67 +1,61 @@
 #!/bin/bash
 
-# Update your application (replace with your actual commands)
-sudo yum update -y
+echo "deleting old app"
+sudo rm -rf /var/www/
 
-# Install additional dependencies if needed (replace with your package names)
-# Example: sudo yum install -y package1 package2
+echo "creating app folder"
+sudo mkdir -p /var/www/my_portfolio_backend
 
-# Replace with your deployment logic
-# This section will vary depending on your application setup
+echo "moving files to app folder"
+sudo mv  * /var/www/my_portfolio_backend
 
-# Option 1: Deploying a static website (replace with your directory)
-# cp -r /path/to/your/local/website/* /var/www/html/
+# Navigate to the app directory
+cd /var/www/my_portfolio_backend/
+sudo mv env .env
 
-# Option 2: Deploying a Python application using virtual environment (replace with your details)
-# Create virtual environment (if not already created)
- python3 -m venv my-env
+sudo apt-get update
+echo "installing python and pip"
+sudo apt-get install -y python3 python3-pip
 
-# Activate virtual environment
- source my-env/bin/activate
+# Install application dependencies from requirements.txt
+echo "Install application dependencies from requirements.txt"
+sudo pip install -r requirements.txt
 
-# Clone/Pull your application code (replace with your Git repository URL)
- git clone https://github.com/<username>/<repository>.git my-app
- cd my-app
- git pull origin main
+# Update and install Nginx if not already installed
+if ! command -v nginx > /dev/null; then
+    echo "Installing Nginx"
+    sudo apt-get update
+    sudo apt-get install -y nginx
+fi
 
-# Install application dependencies within the virtual environment
- pip install -r requirements.txt
+# Configure Nginx to act as a reverse proxy if not already configured
+if [ ! -f /etc/nginx/sites-available/myapp ]; then
+    sudo rm -f /etc/nginx/sites-enabled/default
+    sudo bash -c 'cat > /etc/nginx/sites-available/myapp <<EOF
+server {
+    listen 80;
+    server_name _;
 
-# (Optional) Copy your application code to a specific directory on the EC2 instance
-# cp -r ./* /var/www/html/my-app/  # Copies everything
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/var/www/my_portfolio_backend/myapp.sock;
+    }
+}
+EOF'
 
-# Create a systemd service file (replace with your app name and path)
- sudo nano /etc/systemd/system/my-app.service
+    sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled
+    sudo systemctl restart nginx
+else
+    echo "Nginx reverse proxy configuration already exists."
+fi
 
-# Example systemd service file content (adjust paths and commands):
- [Unit]
- Description=My Python App
- After=network.target
+# Stop any existing Gunicorn process
+sudo pkill gunicorn
+sudo rm -rf myapp.sock
 
- [Service]
- WorkingDirectory=/var/www/html/my-app  # Replace with your app directory
- User=ec2-user
- Group=ec2-user
- Environment="PATH=/home/ec2-user/my-env/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"  # Update path with virtual environment
- ExecStart=/home/ec2-user/my-env/bin/gunicorn wsgi:application -b 0.0.0.0:8000  # Update path with virtual environment
-
- [Install]
- WantedBy=multi-user.target
-
-# Reload systemd and start the service
-sudo systemctl daemon-reload
-sudo systemctl start my-app.service
-
-# Enable the service to start automatically on boot
-sudo systemctl enable my-app.service
-
-# Deactivate the virtual environment (optional)
- deactivate
-
-# (Optional) Restart any additional services (replace with your service names)
- sudo systemctl restart nginx  # Example for restarting nginx
-
-# Let the script know it finished successfully
-echo "Deployment completed!"
-
-exit 0
+# # Start Gunicorn with the Flask application
+# # Replace 'server:app' with 'yourfile:app' if your Flask instance is named differently.
+# # gunicorn --workers 3 --bind 0.0.0.0:8000 server:app &
+echo "starting gunicorn"
+sudo gunicorn --workers 3 --bind unix:myapp.sock  main:app --user www-data --group www-data --daemon
+echo "started gunicorn 🚀"
