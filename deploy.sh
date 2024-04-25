@@ -22,7 +22,7 @@ sudo yum install -y python3 python3-pip nginx
 
 # Install application dependencies from requirements.txt
 echo "Installing application dependencies from requirements.txt"
-sudo pip3 install -r requirements.txt
+sudo pip3 install --user -r requirements.txt
 
 # Configure Nginx as a reverse proxy
 echo "Configuring Nginx as a reverse proxy"
