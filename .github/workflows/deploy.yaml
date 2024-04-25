@@ -22,7 +22,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install putty-tools -y
 
       - name: Convert .ppk to .pem
-        run: puttygen test_instance.ppk -O private-openssh -o deploy-key/id_rsa
+        run: puttygen /test_instance.ppk -O private-openssh -o deploy-key/id_rsa
 
       - name: Upload SSH key
         uses: actions/upload-artifact@v3
