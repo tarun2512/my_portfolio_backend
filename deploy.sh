@@ -47,6 +47,6 @@ sudo rm -rf myapp.sock
 
 # Start Gunicorn with the Flask application
 echo "Starting Gunicorn"
-sudo pip3 install gunicorn
+sudo pip3 install --user gunicorn
 sudo gunicorn --workers 3 --bind unix:/var/www/my_portfolio_backend/myapp.sock main:app --user nginx --group nginx --daemon
 echo "Started Gunicorn 🚀"
