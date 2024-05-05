@@ -3,9 +3,6 @@
 # Change directory to the location of the script
 cd "$(dirname "$0")"
 
-# Print current directory for debugging
-echo "Current directory: $(pwd)"
-
 # Deleting old app
 sudo rm -rf /var/www/
 
@@ -18,20 +15,15 @@ sudo mv ./* /var/www/my_portfolio_backend/
 # Navigate to the app directory
 cd /var/www/my_portfolio_backend/
 
-# Install virtualenv if not already installed
-if ! command -v virtualenv &> /dev/null; then
-    echo "Installing virtualenv"
-    sudo pip install virtualenv
-fi
+# Install pip and virtualenv if not already installed
+sudo yum install python3-pip -y
+sudo pip3 install virtualenv
 
 # Create virtual environment
-sudo virtualenv venv
+virtualenv venv
 
 # Activate virtual environment
 source venv/bin/activate
-
-# Check if activation script is found
-ls -l venv/bin/activate
 
 python3 --version
 
