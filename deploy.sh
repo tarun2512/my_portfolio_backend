@@ -4,13 +4,13 @@
 cd "$(dirname "$0")"
 
 echo "Deleting old app"
-rm -rf /var/www/
+sudo rm -rf /var/www/my_portfolio_backend
 
 echo "Creating app folder"
-mkdir -p /var/www/my_portfolio_backend
+sudo mkdir -p /var/www/my_portfolio_backend
 
 echo "Moving files to app folder"
-mv ./* /var/www/my_portfolio_backend/
+sudo mv ./* /var/www/my_portfolio_backend/
 
 # Navigate to the app directory
 cd /var/www/my_portfolio_backend/
@@ -29,16 +29,12 @@ else
     echo "requirements.txt not found"
 fi
 
-
 # Install Nginx (if not already installed)
 if ! command -v nginx &> /dev/null
 then
     echo "Nginx is not installed. Installing..."
     sudo yum install nginx -y
 fi
-
-# Change directory to the location of the script
-cd "$(dirname "$0")"
 
 # Create the directory if it doesn't exist
 sudo mkdir -p /etc/nginx/conf.d/
@@ -56,14 +52,16 @@ server {
     server_name _;
 
     location / {
-        include proxy_params;
         proxy_pass http://unix:/var/www/my_portfolio_backend/myapp.sock;
+        include proxy_params;
     }
 }
 EOF
 
+# Test Nginx configuration
 sudo nginx -t
 
+# Restart Nginx
 sudo systemctl restart nginx
 
 # Stop any existing Gunicorn process
@@ -73,6 +71,7 @@ sudo rm -rf /var/www/my_portfolio_backend/myapp.sock
 
 # Start Gunicorn with the Flask application
 echo "Starting Gunicorn"
+source venv/bin/activate
 pip install gunicorn
 sudo gunicorn --workers 3 --bind unix:/var/www/my_portfolio_backend/myapp.sock main:app --daemon
 echo "Started Gunicorn 🚀"
