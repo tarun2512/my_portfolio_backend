@@ -34,7 +34,7 @@ sudo mkdir -p /etc/nginx/conf.d/
 
 # Configure Nginx as a reverse proxy
 echo "Configuring Nginx as a reverse proxy"
-tee /etc/nginx/conf.d/myapp.conf > /dev/null <<EOF
+sudo tee /etc/nginx/conf.d/myapp.conf > /dev/null <<EOF
 server {
     listen 80;
     server_name _;
@@ -50,13 +50,13 @@ sudo systemctl restart nginx
 
 # Stop any existing Gunicorn process
 echo "Stopping any existing Gunicorn process"
-pkill gunicorn
-rm -rf myapp.sock
+sudo pkill gunicorn
+sudo rm -rf /var/www/my_portfolio_backend/myapp.sock
 
 # Start Gunicorn with the Flask application
 echo "Starting Gunicorn"
 pip install gunicorn
-gunicorn --workers 3 --bind unix:/var/www/my_portfolio_backend/myapp.sock main:app --daemon
+sudo gunicorn --workers 3 --bind unix:/var/www/my_portfolio_backend/myapp.sock main:app --daemon
 echo "Started Gunicorn 🚀"
 
 # Deactivate the virtual environment
