@@ -7,21 +7,21 @@ cd "$(dirname "$0")"
 echo "Current directory: $(pwd)"
 
 # Deleting old app
-sudo rm -rf /var/www/
+sudo rm -rf /var/www/my_portfolio_backend/
 
 # Creating app folder
 sudo mkdir -p /var/www/my_portfolio_backend
 
 # Moving files to app folder
-sudo mv ./* /var/www/my_portfolio_backend/
+sudo cp -r ./* /var/www/my_portfolio_backend/
 
 # Navigate to the app directory
 cd /var/www/my_portfolio_backend/
 
 echo "Current directory: $(pwd)"
 
-# Create a virtual environment
-python3 -m venv venv
+# Create and activate a virtual environment with appropriate permissions
+sudo python3 -m venv venv
 
 # Print virtual environment directory for debugging
 ls -l venv
@@ -70,7 +70,7 @@ sudo rm -rf /var/www/my_portfolio_backend/myapp.sock
 
 # Start Gunicorn with the Flask application
 echo "Starting Gunicorn"
-pip install gunicorn
+sudo pip install gunicorn
 sudo gunicorn --workers 3 --bind unix:/var/www/my_portfolio_backend/myapp.sock main:app --daemon || { echo "Failed to start Gunicorn"; exit 1; }
 
 echo "Started Gunicorn 🚀"
