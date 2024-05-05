@@ -29,6 +29,9 @@ else
     echo "requirements.txt not found"
 fi
 
+# Create the directory if it doesn't exist
+sudo mkdir -p /etc/nginx/conf.d/
+
 # Configure Nginx as a reverse proxy
 echo "Configuring Nginx as a reverse proxy"
 tee /etc/nginx/conf.d/myapp.conf > /dev/null <<EOF
@@ -43,7 +46,7 @@ server {
 }
 EOF
 
-systemctl restart nginx
+sudo systemctl restart nginx
 
 # Stop any existing Gunicorn process
 echo "Stopping any existing Gunicorn process"
