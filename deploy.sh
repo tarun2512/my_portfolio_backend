@@ -46,6 +46,12 @@ sudo mkdir -p /etc/nginx/conf.d/
 # Configure Nginx as a reverse proxy
 echo "Configuring Nginx as a reverse proxy"
 sudo tee /etc/nginx/conf.d/myapp.conf > /dev/null <<EOF
+proxy_set_header Host $http_host;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+EOF
+
 server {
     listen 80;
     server_name _;
@@ -56,6 +62,8 @@ server {
     }
 }
 EOF
+
+sudo nginx -t
 
 sudo systemctl restart nginx
 
