@@ -4,13 +4,13 @@
 cd "$(dirname "$0")"
 
 echo "Deleting old app"
-rm -rf /var/www/
+sudo rm -rf /var/www/
 
 echo "Creating app folder"
-mkdir -p /var/www/my_portfolio_backend
+sudo mkdir -p /var/www/my_portfolio_backend
 
 echo "Moving files to app folder"
-mv ./* /var/www/my_portfolio_backend/
+sudo mv ./* /var/www/my_portfolio_backend/
 
 # Navigate to the app directory
 cd /var/www/my_portfolio_backend/
