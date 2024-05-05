@@ -34,7 +34,6 @@ jobs:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
         run: |
-          ssh-keygen -p -N "" -f ~/.ssh/id_rsa  # Remove passphrase from SSH key
           ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "mkdir -p /media/my_portfolio_backend && chmod 777 /media/my_portfolio_backend"
 
       - name: Copy files to remote server
