@@ -63,8 +63,9 @@ sudo rm -rf /var/www/my_portfolio_backend/myapp.sock
 
 # Start Gunicorn with the Flask application
 echo "Starting Gunicorn"
-gunicorn --workers 3 --bind unix:/var/www/my_portfolio_backend/myapp.sock main:app --daemon
+gunicorn --workers 3 --bind unix:/var/www/my_portfolio_backend/myapp.sock main:app --daemon || { echo "Failed to start Gunicorn"; exit 1; }
+
 echo "Started Gunicorn 🚀"
 
 # Deactivate the virtual environment
-deactivate
+deactivate || { echo "Failed to deactivate virtual environment"; exit 1; }
