@@ -2,24 +2,24 @@ name: Deploy to EC2 🚀
 
 on:
   push:
-    branches: [main]
+    branches:
+      - "main" # This triggers the workflow on push to any branch
 
 jobs:
-
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout current branch
+      - name: Checkout current branch ✅
         uses: actions/checkout@v2
 
-      - name: Set up SSH key and whitelist EC2 IP address
+      - name: Set up SSH key and whitelist EC2 IP address 🐻‍❄️
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Create .env file dynamically
+      - name: Create .env file dynamically 🧨
         env:
           ENV: ${{ secrets.ENV }}
           EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
@@ -29,41 +29,20 @@ jobs:
           echo "EC2_USERNAME=${EC2_USERNAME}" >> env
           echo "OPENAI_API_KEY=${OPENAI_API_KEY}" >> env
 
-      - name: Debug environment variables
-        run: |
-          echo "EC2_HOST: ${EC2_HOST}" >> env
-          echo "EC2_USERNAME: ${EC2_USERNAME}" >> env
-
-
-      - name: Test SSH connection
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}
-          EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
-        run: |
-          ssh -v -o StrictHostKeyChecking=no ${EC2_USERNAME}@${EC2_HOST} exit
-
-
-      - name: Set permissions and create directory on remote server
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}
-          EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
-        run: |
-          ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "mkdir -p /media/my_portfolio_backend && chmod 777 /media/my_portfolio_backend"
-
-      - name: Copy files to remote server
+      - name: Copy files to remote server 🚙
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
         run: |
           scp -r * $EC2_USERNAME@$EC2_HOST:/media/my_portfolio_backend/
 
-      - name: Run Bash Script To Delpoy App
+      - name: Run Bash Script To Delpoy App 🚀
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
         run: |
-          ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "chmod +x /media/my_portfolio_backend/deploy.sh && /media/my_portfolio_backend/deploy.sh"
+          ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "chmod +x ./deploy.sh && ./deploy.sh"
 
-      - name: Clean up SSH key
+      - name: Clean up SSH key 🚀
         if: always()
         run: rm -f ~/.ssh/id_rsa
