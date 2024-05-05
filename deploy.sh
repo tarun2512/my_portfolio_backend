@@ -19,7 +19,8 @@ sudo mv ./* /var/www/my_portfolio_backend/
 cd /var/www/my_portfolio_backend/
 
 echo "Current directory: $(pwd)"
-# Create and activate a virtual environment
+
+# Create a virtual environment
 python3 -m venv venv
 
 # Print virtual environment directory for debugging
@@ -75,5 +76,4 @@ sudo gunicorn --workers 3 --bind unix:/var/www/my_portfolio_backend/myapp.sock m
 echo "Started Gunicorn 🚀"
 
 # Deactivate the virtual environment
-cd "$OLDPWD"
 deactivate || { echo "Failed to deactivate virtual environment"; exit 1; }
