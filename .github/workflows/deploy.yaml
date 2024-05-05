@@ -31,8 +31,8 @@ jobs:
 
       - name: Debug environment variables
         run: |
-          echo "EC2_HOST: $EC2_HOST"
-          echo "EC2_USERNAME: $EC2_USERNAME"
+          echo "EC2_HOST: ${EC2_HOST}" >> env
+          echo "EC2_USERNAME: ${EC2_USERNAME}" >> env
 
 
       - name: Test SSH connection
@@ -40,7 +40,7 @@ jobs:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
         run: |
-          ssh -v -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST exit
+          ssh -v -o StrictHostKeyChecking=no ${EC2_USERNAME}@${EC2_HOST} exit
 
 
       - name: Set permissions and create directory on remote server
