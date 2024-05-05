@@ -34,9 +34,10 @@ jobs:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
         run: |
+          ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST "mkdir -p /media/my_portfolio_backend && chmod 777 /media/my_portfolio_backend"
           scp -r * $EC2_USERNAME@$EC2_HOST:/media/my_portfolio_backend/
 
-      - name: Run Bash Script To Delpoy App
+      - name: Run Bash Script To Deploy App
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
