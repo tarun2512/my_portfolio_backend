@@ -29,6 +29,17 @@ else
     echo "requirements.txt not found"
 fi
 
+
+# Install Nginx (if not already installed)
+if ! command -v nginx &> /dev/null
+then
+    echo "Nginx is not installed. Installing..."
+    sudo yum install nginx -y
+fi
+
+# Change directory to the location of the script
+cd "$(dirname "$0")"
+
 # Create the directory if it doesn't exist
 sudo mkdir -p /etc/nginx/conf.d/
 
