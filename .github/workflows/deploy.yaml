@@ -29,6 +29,20 @@ jobs:
           echo "EC2_USERNAME=${EC2_USERNAME}" >> env
           echo "OPENAI_API_KEY=${OPENAI_API_KEY}" >> env
 
+      - name: Debug environment variables
+        run: |
+          echo "EC2_HOST: $EC2_HOST"
+          echo "EC2_USERNAME: $EC2_USERNAME"
+
+
+      - name: Test SSH connection
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
+        run: |
+          ssh -v -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_HOST exit
+
+
       - name: Set permissions and create directory on remote server
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
@@ -43,7 +57,7 @@ jobs:
         run: |
           scp -r * $EC2_USERNAME@$EC2_HOST:/media/my_portfolio_backend/
 
-      - name: Run Bash Script To Deploy App
+      - name: Run Bash Script To Delpoy App
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
