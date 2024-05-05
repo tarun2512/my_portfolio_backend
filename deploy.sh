@@ -7,10 +7,10 @@ echo "Deleting old app"
 sudo rm -rf /var/www/
 
 echo "Creating app folder"
-sudo mkdir -p /var/www/my_portfolio_backend
+mkdir -p /var/www/my_portfolio_backend
 
 echo "Moving files to app folder"
-sudo mv ./* /var/www/my_portfolio_backend/
+mv ./* /var/www/my_portfolio_backend/
 
 # Navigate to the app directory
 cd /var/www/my_portfolio_backend/
