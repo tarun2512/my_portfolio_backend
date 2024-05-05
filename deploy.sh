@@ -68,4 +68,5 @@ gunicorn --workers 3 --bind unix:/var/www/my_portfolio_backend/myapp.sock main:a
 echo "Started Gunicorn 🚀"
 
 # Deactivate the virtual environment
+cd "$OLDPWD"
 deactivate || { echo "Failed to deactivate virtual environment"; exit 1; }
