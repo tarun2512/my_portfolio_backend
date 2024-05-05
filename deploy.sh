@@ -3,21 +3,32 @@
 # Change directory to the location of the script
 cd "$(dirname "$0")"
 
-echo "Deleting old app"
+# Print current directory for debugging
+echo "Current directory: $(pwd)"
+
+# Deleting old app
 sudo rm -rf /var/www/
 
-echo "Creating app folder"
-mkdir -p /var/www/my_portfolio_backend
+# Creating app folder
+sudo mkdir -p /var/www/my_portfolio_backend
 
-echo "Moving files to app folder"
-mv ./* /var/www/my_portfolio_backend/
+# Moving files to app folder
+sudo mv ./* /var/www/my_portfolio_backend/
 
 # Navigate to the app directory
 cd /var/www/my_portfolio_backend/
 
 # Create and activate a virtual environment
 python3 -m venv venv
+
+# Print virtual environment directory for debugging
+ls -l venv
+
+# Activate virtual environment
 source venv/bin/activate
+
+# Check if activation script is found
+ls -l venv/bin/activate
 
 python3 --version
 
@@ -27,14 +38,6 @@ if [ -f "requirements.txt" ]; then
     pip install -r requirements.txt
 else
     echo "requirements.txt not found"
-fi
-
-
-# Install Nginx (if not already installed)
-if ! command -v nginx &> /dev/null
-then
-    echo "Nginx is not installed. Installing..."
-    sudo yum install nginx -y
 fi
 
 # Change directory to the location of the script
