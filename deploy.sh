@@ -3,6 +3,9 @@
 # Change directory to the location of the script
 cd "$(dirname "$0")"
 
+# Print current directory for debugging
+echo "Current directory: $(pwd)"
+
 # Deleting old app
 sudo rm -rf /var/www/
 
@@ -15,13 +18,17 @@ sudo mv ./* /var/www/my_portfolio_backend/
 # Navigate to the app directory
 cd /var/www/my_portfolio_backend/
 
-# Create and activate a virtual environment in /tmp
-if [ -f "/venv/bin/activate" ]; then
-    source /venv/bin/activate || { echo "Failed to activate virtual environment"; exit 1; }
-else
-    python3 -m venv venv || { echo "Failed to create virtual environment"; exit 1; }
-    source /venv/bin/activate || { echo "Failed to activate virtual environment"; exit 1; }
-fi
+# Create and activate a virtual environment
+python3 -m venv venv
+
+# Print virtual environment directory for debugging
+ls -l venv
+
+# Activate virtual environment
+source venv/bin/activate
+
+# Check if activation script is found
+ls -l venv/bin/activate
 
 python3 --version
 
@@ -61,7 +68,8 @@ sudo rm -rf /var/www/my_portfolio_backend/myapp.sock
 
 # Start Gunicorn with the Flask application
 echo "Starting Gunicorn"
-gunicorn --workers 3 --bind unix:/var/www/my_portfolio_backend/myapp.sock main:app --daemon || { echo "Failed to start Gunicorn"; exit 1; }
+pip install gunicorn
+sudo gunicorn --workers 3 --bind unix:/var/www/my_portfolio_backend/myapp.sock main:app --daemon || { echo "Failed to start Gunicorn"; exit 1; }
 
 echo "Started Gunicorn 🚀"
 
