@@ -18,6 +18,7 @@ sudo mv ./* /var/www/my_portfolio_backend/
 # Navigate to the app directory
 cd /var/www/my_portfolio_backend/
 
+echo "Current directory: $(pwd)"
 # Create and activate a virtual environment
 python3 -m venv venv
 
