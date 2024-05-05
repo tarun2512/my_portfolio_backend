@@ -18,11 +18,14 @@ sudo mv ./* /var/www/my_portfolio_backend/
 # Navigate to the app directory
 cd /var/www/my_portfolio_backend/
 
-# Create and activate a virtual environment
-python3 -m venv venv
+# Install virtualenv if not already installed
+if ! command -v virtualenv &> /dev/null; then
+    echo "Installing virtualenv"
+    sudo pip install virtualenv
+fi
 
-# Print virtual environment directory for debugging
-ls -l venv
+# Create virtual environment
+sudo virtualenv venv
 
 # Activate virtual environment
 source venv/bin/activate
