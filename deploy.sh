@@ -19,7 +19,7 @@ cd /var/www/my_portfolio_backend/
 if [ -f "/venv/bin/activate" ]; then
     source /venv/bin/activate || { echo "Failed to activate virtual environment"; exit 1; }
 else
-    python3 -m venv /venv || { echo "Failed to create virtual environment"; exit 1; }
+    python3 -m venv venv || { echo "Failed to create virtual environment"; exit 1; }
     source /venv/bin/activate || { echo "Failed to activate virtual environment"; exit 1; }
 fi
 
