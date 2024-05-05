@@ -19,6 +19,8 @@ cd /var/www/my_portfolio_backend/
 python3 -m venv venv
 source venv/bin/activate
 
+python3 --version
+
 # Install application dependencies from requirements.txt if it exists
 if [ -f "requirements.txt" ]; then
     echo "Installing application dependencies from requirements.txt"
