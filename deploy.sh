@@ -15,15 +15,13 @@ sudo mv ./* /var/www/my_portfolio_backend/
 # Navigate to the app directory
 cd /var/www/my_portfolio_backend/
 
-# Install pip and virtualenv if not already installed
-sudo yum install python3-pip -y
-sudo pip3 install virtualenv
-
-# Create virtual environment
-virtualenv venv
-
-# Activate virtual environment
-source venv/bin/activate
+# Create and activate a virtual environment in /tmp
+if [ -f "/venv/bin/activate" ]; then
+    source /venv/bin/activate || { echo "Failed to activate virtual environment"; exit 1; }
+else
+    python3 -m venv /venv || { echo "Failed to create virtual environment"; exit 1; }
+    source /venv/bin/activate || { echo "Failed to activate virtual environment"; exit 1; }
+fi
 
 python3 --version
 
