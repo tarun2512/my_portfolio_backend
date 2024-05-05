@@ -35,33 +35,25 @@ else
     echo "requirements.txt not found"
 fi
 
-# Change directory to the location of the script
-cd "$(dirname "$0")"
-
-# Create the directory if it doesn't exist
-sudo mkdir -p /etc/nginx/conf.d/
-
 # Configure Nginx as a reverse proxy
 echo "Configuring Nginx as a reverse proxy"
 sudo tee /etc/nginx/conf.d/myapp.conf > /dev/null <<EOF
-proxy_set_header Host $http_host;
-proxy_set_header X-Real-IP $remote_addr;
-proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-proxy_set_header X-Forwarded-Proto $scheme;
-
 server {
     listen 80;
     server_name _;
 
     location / {
-        include proxy_params;
+        proxy_set_header Host \$http_host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+
         proxy_pass http://unix:/var/www/my_portfolio_backend/myapp.sock;
     }
 }
 EOF
 
 sudo nginx -t
-
 sudo systemctl restart nginx
 
 # Stop any existing Gunicorn process
@@ -71,8 +63,7 @@ sudo rm -rf /var/www/my_portfolio_backend/myapp.sock
 
 # Start Gunicorn with the Flask application
 echo "Starting Gunicorn"
-pip install gunicorn
-sudo gunicorn --workers 3 --bind unix:/var/www/my_portfolio_backend/myapp.sock main:app --daemon
+gunicorn --workers 3 --bind unix:/var/www/my_portfolio_backend/myapp.sock main:app --daemon
 echo "Started Gunicorn 🚀"
 
 # Deactivate the virtual environment
