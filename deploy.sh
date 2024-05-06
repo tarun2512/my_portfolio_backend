@@ -64,7 +64,7 @@ server {
 EOF
 
 sudo nginx -t
-sudo systemctl restart nginx
+sudo systemctl start nginx
 
 # Stop any existing Gunicorn process
 echo "Stopping any existing Gunicorn process"
