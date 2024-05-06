@@ -23,7 +23,7 @@ echo "Current directory: $(pwd)"
 sudo chmod 777 /var/www/my_portfolio_backend/
 
 # Create and activate a virtual environment with appropriate permissions
-python3 -m venv venv
+sudo python3 -m venv venv
 
 # Print virtual environment directory for debugging
 ls -l venv
