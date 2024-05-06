@@ -36,8 +36,6 @@ sudo chmod -R u+rwx /var/www/my_portfolio_backend/
 
 python3 --version
 
-sudo rpm -e python3-pip
-
 sudo pip install --upgrade pip
 
 # Install application dependencies from requirements.txt if it exists
