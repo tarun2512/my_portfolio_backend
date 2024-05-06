@@ -20,7 +20,7 @@ cd /var/www/my_portfolio_backend/
 
 echo "Current directory: $(pwd)"
 
-sudo chmod -R u+rwx /var/www/my_portfolio_backend/
+sudo chmod 777 /var/www/my_portfolio_backend/
 
 # Create and activate a virtual environment with appropriate permissions
 python3 -m venv venv
