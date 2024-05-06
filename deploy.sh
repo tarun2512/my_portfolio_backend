@@ -20,6 +20,8 @@ cd /var/www/my_portfolio_backend/
 
 echo "Current directory: $(pwd)"
 
+sudo chmod -R u+rwx /var/www/my_portfolio_backend/
+
 # Create and activate a virtual environment with appropriate permissions
 python3 -m venv venv
 
@@ -34,8 +36,6 @@ python3 -m pip install --upgrade pip
 
 # Check if activation script is found
 ls -l venv/bin/activate
-
-sudo chmod -R u+rwx /var/www/my_portfolio_backend/
 
 python3 --version
 
