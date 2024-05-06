@@ -22,6 +22,8 @@ echo "Current directory: $(pwd)"
 
 sudo chmod 777 /var/www/my_portfolio_backend/
 
+sudo rm -rf /var/www/my_portfolio_backend/venv/
+
 # Create and activate a virtual environment with appropriate permissions
 sudo python3 -m venv venv
 
