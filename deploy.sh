@@ -42,7 +42,7 @@ python3 --version
 # Install application dependencies from requirements.txt if it exists
 if [ -f "requirements.txt" ]; then
     echo "Installing application dependencies from requirements.txt"
-    sudo pip install -r requirements.txt
+    sudo pip install -r --user requirements.txt
 else
     echo "requirements.txt not found"
 fi
