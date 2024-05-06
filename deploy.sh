@@ -21,7 +21,7 @@ cd /var/www/my_portfolio_backend/
 echo "Current directory: $(pwd)"
 
 # Create and activate a virtual environment with appropriate permissions
-sudo python3 -m venv venv
+python3 -m venv venv
 
 # Print virtual environment directory for debugging
 ls -l venv
@@ -29,14 +29,15 @@ ls -l venv
 # Activate virtual environment
 source venv/bin/activate
 
+python3 -m pip install --upgrade pip
+
+
 # Check if activation script is found
 ls -l venv/bin/activate
 
 sudo chmod -R u+rwx /var/www/my_portfolio_backend/
 
 python3 --version
-
-sudo pip install --upgrade pip
 
 # Install application dependencies from requirements.txt if it exists
 if [ -f "requirements.txt" ]; then
