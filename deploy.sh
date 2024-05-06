@@ -20,21 +20,21 @@ cd /var/www/my_portfolio_backend/
 
 echo "Current directory: $(pwd)"
 
-sudo chmod 777 /var/www/my_portfolio_backend/
+# Set permissions for the app folder
+sudo chown -R $USER:$USER /var/www/my_portfolio_backend/
+sudo chmod -R 755 /var/www/my_portfolio_backend/
 
-sudo rm -rf /var/www/my_portfolio_backend/venv/
+# Remove existing virtual environment
+rm -rf /var/www/my_portfolio_backend/venv/
 
-# Create and activate a virtual environment with appropriate permissions
-sudo python3 -m venv /var/www/my_portfolio_backend/venv/
-
-# Print virtual environment directory for debugging
-ls -l venv
+# Create and activate a virtual environment
+python3 -m venv venv/
 
 # Activate virtual environment
 source venv/bin/activate
 
 # Upgrade pip within the virtual environment
-python3 -m pip install --upgrade pip
+python -m pip install --upgrade pip
 
 # Install application dependencies from requirements.txt if it exists
 if [ -f "requirements.txt" ]; then
@@ -69,8 +69,8 @@ sudo systemctl reload nginx
 
 # Stop any existing Gunicorn process
 echo "Stopping any existing Gunicorn process"
-sudo pkill gunicorn
-sudo rm -rf /var/www/my_portfolio_backend/myapp.sock
+pkill gunicorn
+rm -f /var/www/my_portfolio_backend/myapp.sock
 
 # Start Gunicorn with the Flask application
 echo "Starting Gunicorn"
