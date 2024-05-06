@@ -26,6 +26,9 @@ sudo python3 -m venv venv
 # Print virtual environment directory for debugging
 ls -l venv
 
+# Activate virtual environment
+source venv/bin/activate
+
 # Check if activation script is found
 ls -l venv/bin/activate
 
@@ -36,9 +39,6 @@ python3 --version
 sudo rpm -e python3-pip
 
 sudo pip install --upgrade pip
-
-# Activate virtual environment
-source venv/bin/activate
 
 # Install application dependencies from requirements.txt if it exists
 if [ -f "requirements.txt" ]; then
