@@ -1,0 +1,35 @@
+name: Deploy Flask App to EC2
+
+on:
+  push:
+    branches:
+      - main  # Change this to your main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}  # Add your EC2 instance's public IP or hostname here
+        username: ${{ secrets.EC2_USERNAME }}  # Add your EC2 instance's username here
+        key: ${{ secrets.EC2_SSH_KEY }}  # Add your EC2 instance's SSH private key here
+        script: |
+          cd /path/to/your/app  # Change this to the directory where your Flask app resides
+          git pull origin main  # Pull the latest changes from GitHub
+          systemctl restart your-flask-app.service  # Restart your Flask app service (if using systemd)
