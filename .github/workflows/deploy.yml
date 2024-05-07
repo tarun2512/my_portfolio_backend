@@ -38,14 +38,13 @@ jobs:
         python -m pip install -r requirements.txt
 
     - name: Deploy to EC2
-      run: |
-        pwd
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
+          pwd
           source /home/runner/work/my_portfolio_backend/my_portfolio_backend  # Load environment variables
           source /home/runner/work/my_portfolio_backend/my_portfolio_backend/venv/bin/activate  # Activate virtual environment
           cd /home/runner/work/my_portfolio_backend/my_portfolio_backend
