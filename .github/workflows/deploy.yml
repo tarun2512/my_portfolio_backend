@@ -46,9 +46,10 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           echo "Current directory: $PWD"
+          cd /home/runner/work/my_portfolio_backend/my_portfolio_backend
           ls -la                    # List directory contents for debugging
-          source ./my_portfolio_backend  # Load environment variables
-          source ./my_portfolio_backend/venv/bin/activate  # Activate virtual environment
-          cd ./my_portfolio_backend
+          source /home/runner/work/my_portfolio_backend/my_portfolio_backend  # Load environment variables
+          source /home/runner/work/my_portfolio_backend/my_portfolio_backend/venv/bin/activate  # Activate virtual environment
+          cd /home/runner/work/my_portfolio_backend/my_portfolio_backend
           git pull origin main
           python main.py
