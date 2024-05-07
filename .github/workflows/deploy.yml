@@ -38,6 +38,8 @@ jobs:
         python -m pip install -r requirements.txt
 
     - name: Deploy to EC2
+      run: |
+        pwd
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.EC2_HOST }}
