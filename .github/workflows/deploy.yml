@@ -21,6 +21,7 @@ jobs:
 
     - name: Set up virtual environment
       run: |
+        sudo chmod 777 /media/my_services
         python3 -m venv /media/my_services/venv
         source /media/my_services/venv/bin/activate
 
