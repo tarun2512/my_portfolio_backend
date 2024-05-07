@@ -45,7 +45,7 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           cd $GITHUB_WORKSPACE
-          echo "Current directory: $(pwd)"
+          echo "Current directory: $PWD"
           ls -la                    # List directory contents for debugging
           source ./my_portfolio_backend  # Load environment variables
           source ./my_portfolio_backend/venv/bin/activate  # Activate virtual environment
