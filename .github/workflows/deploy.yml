@@ -35,6 +35,7 @@ jobs:
 
     - name: Install dependencies
       run: |
+        pwd
         python -m pip install -r requirements.txt
 
     - name: Deploy to EC2
@@ -44,7 +45,6 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          cd $GITHUB_WORKSPACE
           echo "Current directory: $PWD"
           ls -la                    # List directory contents for debugging
           source ./my_portfolio_backend  # Load environment variables
