@@ -39,5 +39,5 @@ jobs:
           cd /media/my_services  # Change this path if necessary
           echo "Current directory: $PWD"
           ls -la  # List directory contents for debugging
-          git pull origin main
-          python main.py
+          /usr/bin/git pull origin main
+          /usr/bin/python main.py
