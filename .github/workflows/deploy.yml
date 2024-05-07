@@ -15,7 +15,9 @@ jobs:
 
     - name: Set up Python and Git
       run: |
-        sudo amazon-linux-extras install python3.8 git -y
+        sudo yum update -y
+        sudo yum install python3 git -y
+        sudo python3 -m pip install --upgrade pip
 
     - name: Set up virtual environment
       run: |
