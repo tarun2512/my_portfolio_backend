@@ -44,9 +44,10 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          CURRENT_DIR=$(pwd)
-          source /home/runner/work/my_portfolio_backend/my_portfolio_backend  # Load environment variables
-          source /home/runner/work/my_portfolio_backend/my_portfolio_backend/venv/bin/activate  # Activate virtual environment
-          cd /home/runner/work/my_portfolio_backend/my_portfolio_backend
+          cd $GITHUB_WORKSPACE
+          echo "Current directory: $(pwd)"
+          source ./my_portfolio_backend  # Load environment variables
+          source ./my_portfolio_backend/venv/bin/activate  # Activate virtual environment
+          cd ./my_portfolio_backend
           git pull origin main
           python main.py
