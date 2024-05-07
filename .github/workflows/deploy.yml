@@ -10,35 +10,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
-    - name: Print Current Directory
-      run: |
-        cd /media/my_services
-        pwd
-
     - name: Checkout code
       uses: actions/checkout@v2
 
     - name: Set up Python and Git
       run: |
-        cd /media/my_services
         sudo apt update -y
         sudo apt install python3 git -y
         python3 -m pip install --upgrade pip
-
-    - name: Print Current Directory 1
-      run: |
-        pwd
 
     - name: Set up virtual environment
       run: |
         python3 -m venv venv
         source venv/bin/activate
+        pip install -r requirements.txt
 
-    - name: Install dependencies
+    - name: Print Current Directory
       run: |
         pwd
-        python -m pip install -r requirements.txt
 
     - name: Deploy to EC2
       uses: appleboy/ssh-action@master
@@ -47,10 +36,8 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
+          cd /media/my_services  # Change this path if necessary
           echo "Current directory: $PWD"
-          ls -la                    # List directory contents for debugging
-          source /home/runner/work/my_portfolio_backend/my_portfolio_backend  # Load environment variables
-          source /home/runner/work/my_portfolio_backend/my_portfolio_backend/venv/bin/activate  # Activate virtual environment
-          cd /home/runner/work/my_portfolio_backend/my_portfolio_backend
+          ls -la  # List directory contents for debugging
           git pull origin main
           python main.py
