@@ -13,6 +13,7 @@ jobs:
 
     - name: Print Current Directory
       run: |
+        cd /media/my_services
         pwd
 
     - name: Checkout code
@@ -20,6 +21,7 @@ jobs:
 
     - name: Set up Python and Git
       run: |
+        cd /media/my_services
         sudo apt update -y
         sudo apt install python3 git -y
         python3 -m pip install --upgrade pip
@@ -46,7 +48,6 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           echo "Current directory: $PWD"
-          cd /home/runner/work/my_portfolio_backend/my_portfolio_backend
           ls -la                    # List directory contents for debugging
           source /home/runner/work/my_portfolio_backend/my_portfolio_backend  # Load environment variables
           source /home/runner/work/my_portfolio_backend/my_portfolio_backend/venv/bin/activate  # Activate virtual environment
