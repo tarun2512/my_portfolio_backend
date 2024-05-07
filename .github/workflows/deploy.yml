@@ -30,9 +30,8 @@ jobs:
 
     - name: Set up virtual environment
       run: |
-        sudo chmod 777 /media/my_services
-        python3 -m venv /media/my_services/venv
-        source /media/my_services/venv/bin/activate
+        python3 -m venv venv
+        source venv/bin/activate
 
     - name: Install dependencies
       run: |
@@ -45,8 +44,8 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          source /media/my_services  # Load environment variables
-          source /media/my_services/venv/bin/activate  # Activate virtual environment
-          cd /media/my_services
+          source /home/runner/work/my_portfolio_backend/my_portfolio_backend  # Load environment variables
+          source /home/runner/work/my_portfolio_backend/my_portfolio_backend/venv/bin/activate  # Activate virtual environment
+          cd /home/runner/work/my_portfolio_backend/my_portfolio_backend
           git pull origin main
           python main.py
