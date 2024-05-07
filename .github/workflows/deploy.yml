@@ -44,7 +44,7 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          pwd
+          CURRENT_DIR=$(pwd)
           source /home/runner/work/my_portfolio_backend/my_portfolio_backend  # Load environment variables
           source /home/runner/work/my_portfolio_backend/my_portfolio_backend/venv/bin/activate  # Activate virtual environment
           cd /home/runner/work/my_portfolio_backend/my_portfolio_backend
