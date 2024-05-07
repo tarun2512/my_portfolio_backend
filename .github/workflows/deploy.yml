@@ -46,6 +46,7 @@ jobs:
         script: |
           cd $GITHUB_WORKSPACE
           echo "Current directory: $(pwd)"
+          ls -la                    # List directory contents for debugging
           source ./my_portfolio_backend  # Load environment variables
           source ./my_portfolio_backend/venv/bin/activate  # Activate virtual environment
           cd ./my_portfolio_backend
