@@ -23,4 +23,4 @@ try:
     port = 8999
 except:
     port = Service.PORT
-app.run(host=Service.HOST, port=port, debug=False, threaded=True, use_reloader=False)
+app.run(port=port, debug=False, threaded=True, use_reloader=False)
