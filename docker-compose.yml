@@ -1,6 +1,9 @@
 version: '3'
 services:
   web:
+    image: my_portfolio_backend:latest
     build: .
     ports:
-      - "8999:8999"
+      - "${PORT}:5000"
+    env_file:
+      - .env
