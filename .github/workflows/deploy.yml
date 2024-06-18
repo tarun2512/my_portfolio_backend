@@ -23,7 +23,7 @@ jobs:
         ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
     - name: Copy files to EC2
-      run: scp -o StrictHostKeyChecking=no -r . ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ec2-user/my_portfolio_backend
+      run: scp -o StrictHostKeyChecking=no -r . root@${{ secrets.EC2_HOST }}:/home/ec2-user/my_portfolio_backend
 
     - name: SSH into EC2 and deploy
       run: |
