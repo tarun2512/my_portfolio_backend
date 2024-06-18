@@ -13,31 +13,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Python and Git
-      run: |
-        sudo apt update -y
-        sudo apt install python3 git -y
-        sudo python3 -m pip install --upgrade pip
-
-    - name: Set up virtual environment
-      run: |
-        python3 -m venv venv
-        source venv/bin/activate
-        pip install -r requirements.txt
-
-    - name: Print Current Directory
-      run: |
-        pwd
-
-    - name: Deploy to EC2
-      uses: appleboy/ssh-action@master
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
       with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          cd /media/my_services  # Change this path if necessary
-          echo "Current directory: $PWD"
-          ls -la  # List directory contents for debugging
-          git pull origin main
-          python3 main.py
+        ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+    - name: Copy files to EC2
+      run: scp -o StrictHostKeyChecking=no -r . ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ec2-user/my_portfolio_backend
+
+    - name: SSH into EC2 and deploy
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          cd /home/ec2-user/my_portfolio_backend
+          sudo docker-compose down
+          sudo docker-compose up --build -d
+        EOF
