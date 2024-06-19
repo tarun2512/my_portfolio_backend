@@ -23,7 +23,7 @@ jobs:
         ssh-keyscan -H 44.203.137.82 >> ~/.ssh/known_hosts
 
     - name: Copy files to EC2
-      run: scp -o StrictHostKeyChecking=no -r . root@$44.203.137.82:/home/ec2-user/my_portfolio_backend
+      run: scp -o StrictHostKeyChecking=no -r . root@$44.203.137.82:/home/ec2-user/mongodb
 
     - name: SSH into EC2 and deploy
       run: |
